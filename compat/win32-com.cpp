@@ -12,6 +12,7 @@
 
 bool OPENTRACK_COMPAT_EXPORT init_com_threading(com_type t_)
 {
+#if 0
     const com_type t = progn(
                            if (t_ != com_invalid)
                                return t_;
@@ -39,7 +40,7 @@ bool OPENTRACK_COMPAT_EXPORT init_com_threading(com_type t_)
                                                      ));
         return false;
     }
-
+#endif
     return true;
 }
 #endif

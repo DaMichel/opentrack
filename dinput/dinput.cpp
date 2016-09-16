@@ -2,6 +2,7 @@
 #include "compat/win32-com.hpp"
 #include <QDebug>
 
+#if 0
 std::atomic<int> dinput_handle::refcnt;
 std::atomic_flag dinput_handle::init_lock = ATOMIC_FLAG_INIT;
 
@@ -85,3 +86,4 @@ dinput_handle::di_t::~di_t()
     if (handle)
         unref_di();
 }
+#endif

@@ -37,6 +37,7 @@ public:
     bool should_process();
 };
 
+#if 0
 struct OPENTRACK_DINPUT_EXPORT KeybindingWorker : private QThread
 {
     using fun = std::function<void(const Key&)>;
@@ -78,3 +79,42 @@ public:
         }
     };
 };
+#else
+struct OPENTRACK_DINPUT_EXPORT KeybindingWorker : private QThread
+{
+    using fun = std::function<void(const Key&)>;
+
+private:
+    std::vector<std::unique_ptr<fun>> receivers;
+    volatile bool should_quit;
+    QMutex mtx;
+
+    void run() override;
+    bool init();
+    KeybindingWorker();
+
+    static KeybindingWorker& make();
+    fun* _add_receiver(fun &receiver);
+    void remove_receiver(fun* pos);
+    ~KeybindingWorker();
+
+    KeybindingWorker(const KeybindingWorker&) = delete;
+    KeybindingWorker& operator=(KeybindingWorker&) = delete;
+public:
+    class Token
+    {
+        fun* pos;
+        Token(const Token&) = delete;
+        Token& operator=(Token&) = delete;
+    public:
+        ~Token()
+        {
+            make().remove_receiver(pos);
+        }
+        Token(fun receiver)
+        {
+            pos = make()._add_receiver(receiver);
+        }
+    };
+};
+#endif

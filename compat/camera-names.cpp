@@ -30,6 +30,7 @@ OPENTRACK_COMPAT_EXPORT int camera_name_to_index(const QString &name)
 OPENTRACK_COMPAT_EXPORT QList<QString> get_camera_names()
 {
     QList<QString> ret;
+#if 0
 #if defined(_WIN32)
     // Create the System Device Enumerator.
     HRESULT hr;
@@ -106,6 +107,9 @@ OPENTRACK_COMPAT_EXPORT QList<QString> get_camera_names()
             close(fd);
         }
     }
+#endif
+#else
+    ret.append(QString("fubar"));
 #endif
     return ret;
 }

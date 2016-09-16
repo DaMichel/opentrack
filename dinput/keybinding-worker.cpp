@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QMutexLocker>
 
+#if 0
 bool Key::should_process()
 {
     if (!enabled || (keycode == 0 && guid == ""))
@@ -198,5 +199,78 @@ void KeybindingWorker::remove_receiver(KeybindingWorker::fun* pos)
         qDebug() << "bad remove receiver" << (long) pos;
     }
 }
+#else
+bool Key::should_process()
+{
+    return false;
+}
+
+KeybindingWorker::~KeybindingWorker()
+{
+    qDebug() << "exit: keybinding worker";
+
+    should_quit = true;
+    wait();
+}
+
+bool KeybindingWorker::init()
+{
+    return true;
+}
+
+KeybindingWorker::KeybindingWorker() : should_quit(false)
+{
+    should_quit = !init();
+
+    start();
+}
+
+KeybindingWorker& KeybindingWorker::make()
+{
+    static KeybindingWorker k;
+    return k;
+}
+
+void KeybindingWorker::run()
+{
+    while (!should_quit)
+    {
+        Sleep(100);
+    }
+}
+
+KeybindingWorker::fun* KeybindingWorker::_add_receiver(fun& receiver)
+{
+    QMutexLocker l(&mtx);
+    receivers.push_back(std::unique_ptr<fun>(new fun(receiver)));
+    fun* f = receivers[receivers.size() - 1].get();
+    return f;
+}
+
+void KeybindingWorker::remove_receiver(KeybindingWorker::fun* pos)
+{
+    QMutexLocker l(&mtx);
+    bool ok = false;
+
+    using s = int;
+
+    for (int i = s(receivers.size()) - 1; i >= 0; i--)
+    {
+        using u = unsigned;
+        if (receivers[u(i)].get() == pos)
+        {
+            ok = true;
+            //qDebug() << "remove receiver" << (long) pos;
+            receivers.erase(receivers.begin() + i);
+            break;
+        }
+    }
+    if (!ok)
+    {
+        qDebug() << "bad remove receiver" << pos;
+    }
+}
+#endif
+
 
 #endif

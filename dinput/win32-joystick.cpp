@@ -11,6 +11,7 @@
 
 #include <QDebug>
 
+#if 0
 QMutex win32_joy_ctx::enum_state::mtx;
 win32_joy_ctx::enum_state win32_joy_ctx::enumerator;
 
@@ -356,4 +357,5 @@ win32_joy_ctx::joy::~joy()
     release();
 }
 
+#endif
 #endif

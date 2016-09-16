@@ -1,5 +1,7 @@
 if(WIN32)
-    opentrack_boilerplate(opentrack-tracker-joystick)
-    target_link_libraries(opentrack-tracker-joystick opentrack-dinput)
+    set(BUILD_JOYSTICK_TRACKER True CACHE BOOL "build joystick tracker")
+    if (BUILD_JOYSTICK_TRACKER)
+        opentrack_boilerplate(opentrack-tracker-joystick)
+        target_link_libraries(opentrack-tracker-joystick opentrack-dinput)
+    endif()
 endif()
-

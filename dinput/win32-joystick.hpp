@@ -24,6 +24,7 @@
 #include <QMutexLocker>
 #include <QWidget>
 
+#if 0
 namespace std {
 template<>
 struct hash<QString>
@@ -97,5 +98,6 @@ private:
 
     static enum_state enumerator;
 };
+#endif
 
 #endif

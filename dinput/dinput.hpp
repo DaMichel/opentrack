@@ -24,6 +24,7 @@ typedef void* LPDIRECTINPUT8;
     extern template struct OPENTRACK_DINPUT_EXPORT std::atomic<int>;
 #endif
 
+#if 0
 class OPENTRACK_DINPUT_EXPORT dinput_handle final
 {
 public:
@@ -58,3 +59,4 @@ public:
     static di_t make_di();
     dinput_handle() = delete;
 };
+#endif
